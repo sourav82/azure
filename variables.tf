@@ -1,16 +1,16 @@
 variable "subscription_id" {
   description = "ID of the subscription"
-  default = ""
+  default = "cbc9e028-1c44-4fc0-b7b8-46ddf1bf05cd"
 }
 
 variable "tenant_id" {
   description = "Id of the tenant id"
-  default = ""
+  default = "31d4d1dc-cce4-44eb-9b04-f716a5be2630"
 }
 
 variable "client_id" {
   description = "Id of the client id"
-  default = ""
+  default = "09d839fc-29b5-4087-ad58-b0e991bf7113"
 }
 
 variable "client_secret" {
@@ -20,14 +20,18 @@ variable "client_secret" {
 
 variable "hub_vnet_name" {
   description = "Name of the vnet to create"
-  default     = "hubvnet"
+  default     = "hub-vnet"
 }
 
-variable "resource_group_name" {
+variable "hub_resource_group_name" {
   description = "Default resource group name that the network will be created in."
-  default     = "test"
+  default     = "RES-Dev-HUB"
 }
 
+variable "spoke1_resource_group_name" {
+	description = "Default resource group for spoke network"
+	default = "RES-Track-Dev"
+}
 variable "location" {
   description = "The location/region where the core network will be created. The full list of Azure regions can be found at https://azure.microsoft.com/regions"
   default     = "uksouth"
@@ -85,5 +89,5 @@ variable "password" {
 }
 variable "vmsize" {
 	description = "Default vm size"
-	default = ""
+	default = "Standard_DS1_v2"
 }
