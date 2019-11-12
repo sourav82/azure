@@ -78,6 +78,8 @@ variable "tags" {
   }
 }
 
+
+
 variable "username" {
 	description = "Default user name to vm"
         default = "ubuntu"
@@ -91,3 +93,13 @@ variable "vmsize" {
 	description = "Default vm size"
 	default = "Standard_DS1_v2"
 }
+
+variable "hubtags"{
+	{
+		"Environment Type" = "Non-Prod"
+	}
+}
+
+variable "spoketags" {}
+
+variable "datahubtags" {}

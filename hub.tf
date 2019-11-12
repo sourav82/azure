@@ -32,6 +32,31 @@ resource "azurerm_subnet" "hub-dmz" {
   virtual_network_name = azurerm_virtual_network.hub-vnet.name
   address_prefix       = "10.180.0.32/27"
 }
+
+resource "azurerm_subnet" "hub-firewall" {
+  name 		= "sub-firewall"
+  resource_group_name = azurerm_resource_group.hub-rg.name
+  virtual_network_name	= azurerm_virtual_network.hub-vnet.name
+  address_space = "10.180.1.0/24"
+}
+resource "azurerm_public_ip" "firewallip" {
+  name = "firewallip"
+  location = "${var.location}"
+  resource_group_name = azurerm_resource_group.hub-rg.name
+  allocation = "Static"
+  sku = "Standard"
+}
+resource "azurerm_firewall" "firewall" {
+  name = "firewallhub001"
+  location = "${var.location}"
+  resource_group_name = azurerm_resource_group.hub-rg.name
+  ip_configuraion {
+	name = "configuration"
+	subnet_id = "${azurerm_subnet.hub-firewall.id}"
+	public_ip_address = "${azurerm_public_ip.firewallip.id}"
+  }
+}
+
 resource "azurerm_network_interface" "hub-nic" {
   name                 = "hub-nic"
   location             = "${var.location}"
