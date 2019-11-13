@@ -1,8 +1,5 @@
 locals {
   prefix-hub         = "hub"
-  hub-location       = "CentralUS"
-  hub-resource-group = "hub-vnet-rg"
-  shared-key         = "4-v3ry-53cr37-1p53c-5h4r3d-k3y"
 }
 
 resource "azurerm_virtual_network" "hub-vnet" {
@@ -37,23 +34,22 @@ resource "azurerm_subnet" "hub-firewall" {
   name 		= "sub-firewall"
   resource_group_name = azurerm_resource_group.hub-rg.name
   virtual_network_name	= azurerm_virtual_network.hub-vnet.name
-  address_space = "10.180.1.0/24"
+  address_prefix = "10.180.1.0/24"
 }
 resource "azurerm_public_ip" "firewallip" {
   name = "firewallip"
   location = "${var.location}"
   resource_group_name = azurerm_resource_group.hub-rg.name
-  allocation = "Static"
   sku = "Standard"
 }
 resource "azurerm_firewall" "firewall" {
   name = "firewallhub001"
   location = "${var.location}"
   resource_group_name = azurerm_resource_group.hub-rg.name
-  ip_configuraion {
+  ip_configuration {
 	name = "configuration"
 	subnet_id = "${azurerm_subnet.hub-firewall.id}"
-	public_ip_address = "${azurerm_public_ip.firewallip.id}"
+	public_ip_address_id = "${azurerm_public_ip.firewallip.id}"
   }
 }
 

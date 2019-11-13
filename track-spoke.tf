@@ -4,34 +4,32 @@ locals {
   prefix-spoke1         = "spoke1"
 }
 
-resource "azurerm_virtual_network" "spoke1-vnet" {
+resource "azurerm_virtual_network" "track-vnet" {
   name                = "${local.prefix-spoke1}-vnet"
-  location            = azurerm_resource_group.spoke1-rg.location
-  resource_group_name = azurerm_resource_group.spoke1-rg.name
+  location            = azurerm_resource_group.spoke-track-rg.location
+  resource_group_name = azurerm_resource_group.spoke-track-rg.name
   address_space       = ["10.181.0.0/16"]
 
-  tags = {
-    environment = local.prefix-spoke1
-  }
-  depends_on = ["azurerm_resource_group.spoke1-rg"]
+  tags = "${var.trackvnettags}"
+  depends_on = ["azurerm_resource_group.spoke-track-rg"]
 }
-resource "azurerm_subnet" "spoke1-mgmt" {
+resource "azurerm_subnet" "track-mgmt" {
   name                 = "mgmt"
-  resource_group_name  = azurerm_resource_group.spoke1-rg.name
-  virtual_network_name = azurerm_virtual_network.spoke1-vnet.name
+  resource_group_name  = azurerm_resource_group.spoke-track-rg.name
+  virtual_network_name = azurerm_virtual_network.track-vnet.name
   address_prefix       = "10.181.0.64/27"
 }
 
 resource "azurerm_subnet" "spoke1-workload" {
   name                 = "workload"
-  resource_group_name  = azurerm_resource_group.spoke1-rg.name
+  resource_group_name  = azurerm_resource_group.spoke-track-rg.name
   virtual_network_name = azurerm_virtual_network.spoke1-vnet.name
   address_prefix       = "10.181.1.0/24"
 }
 
 resource "azurerm_virtual_network_peering" "spoke1-hub-peer" {
   name                      = "spoke1-hub-peer"
-  resource_group_name       = azurerm_resource_group.spoke1-rg.name
+  resource_group_name       = azurerm_resource_group.spoke-track-rg.name
   virtual_network_name      = azurerm_virtual_network.spoke1-vnet.name
   remote_virtual_network_id = azurerm_virtual_network.hub-vnet.id
 
@@ -43,8 +41,8 @@ resource "azurerm_virtual_network_peering" "spoke1-hub-peer" {
 }
 resource "azurerm_network_interface" "spoke1-nic" {
   name                 = "${local.prefix-spoke1}-nic"
-  location             = azurerm_resource_group.spoke1-rg.location
-  resource_group_name  = azurerm_resource_group.spoke1-rg.name
+  location             = azurerm_resource_group.spoke-track-rg.location
+  resource_group_name  = azurerm_resource_group.spoke-track-rg.name
   enable_ip_forwarding = true
 
   ip_configuration {
@@ -56,8 +54,8 @@ resource "azurerm_network_interface" "spoke1-nic" {
 
 resource "azurerm_virtual_machine" "spoke1-vm" {
   name                  = "${local.prefix-spoke1}-vm"
-  location              = azurerm_resource_group.spoke1-rg.location
-  resource_group_name   = azurerm_resource_group.spoke1-rg.name
+  location              = azurerm_resource_group.spoke-track-rg.location
+  resource_group_name   = azurerm_resource_group.spoke-track-rg.name
   network_interface_ids = [azurerm_network_interface.spoke1-nic.id]
   vm_size               = var.vmsize
 

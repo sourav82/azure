@@ -20,12 +20,43 @@ variable "client_secret" {
 
 variable "hub_vnet_name" {
   description = "Name of the vnet to create"
-  default     = "hub-vnet"
+  default     = "VNET-II-HUB"
 }
 
-variable "hub_resource_group_name" {
+variable "data_hub_vnet_name" {
+  description = "Name of the vnet in data hub"
+  default     = "VNET-INNOV-HUB"
+}
+
+variable "track_spoke_vnet_name" {
+  description = "Name of the vnet in track project"
+  default     = "VNET-INNOV-TRACK"
+}
+
+variable "signal_spoke_vnet_name" {
+  description = "Name of the vnet in signal project"
+  default     = "VNET-INNOV-SIG"
+}
+
+variable "hub_rg" {
   description = "Default resource group name that the network will be created in."
-  default     = "RES-Dev-HUB"
+  default     = "RES-II-HUB"
+}
+
+variable "data_hub_innovation_rg" {
+  description = "Dsata hub for innovation environment"
+  default = "RES-II-Innovation-DataHUB"
+}
+
+variable "spoke-track_rg" {
+  description = "Resource group for Track project"
+  default = "RES-II-Innovation-Track"
+
+}
+
+variable "spoke-signal_rg" {
+  description = "Resource group for Signalling project"
+  default = "RES-II-Innovation-Sig"
 }
 
 variable "spoke1_resource_group_name" {
@@ -78,8 +109,37 @@ variable "tags" {
   }
 }
 
+variable "hubtags" {
+  description = "Tags for hub resource group"
+  default = {
+	Environment-Type = "Non-Production"
+	Project = "Hub"
+  }
+}
 
+variable "datahubinnovtags" {
+  description = "Tags for Innovation data hub resource group"
+  default = {
+        Environment-Type = "Innovation"
+        Project = "DataHUB"
+  }
+}
 
+variable "spoketrackinnovtags" {
+  description = "Tags for Innovation track resource group"
+  default = {
+        Environment-Type = "Innovation"
+        Project = "Track"
+  }
+}
+
+variable "spokesignalinnovtags" {
+  description = "Tags for Innovation signalling resource group"
+  default = {
+        Environment-Type = "Innovation"
+        Project = "Signal"
+  }
+}
 variable "username" {
 	description = "Default user name to vm"
         default = "ubuntu"
@@ -94,12 +154,3 @@ variable "vmsize" {
 	default = "Standard_DS1_v2"
 }
 
-variable "hubtags"{
-	{
-		"Environment Type" = "Non-Prod"
-	}
-}
-
-variable "spoketags" {}
-
-variable "datahubtags" {}
