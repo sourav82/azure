@@ -30,7 +30,7 @@ resource "azurerm_virtual_network_peering" "track-hub-peer" {
   depends_on = ["azurerm_virtual_network.track-vnet", "azurerm_virtual_network.hub-vnet" ]
 }
 resource "azurerm_network_interface" "track-nic" {
-  name                 = "${local.prefix-track}-nic"
+  name                 = "track-nic"
   location             = azurerm_resource_group.innovation-rg.location
   resource_group_name  = azurerm_resource_group.innovation-rg.name
   enable_ip_forwarding = true
@@ -85,7 +85,7 @@ resource "azurerm_virtual_machine" "track-vm" {
 
 resource "azurerm_virtual_network_peering" "hub-track-peer" {
   name                      = "hub-track-peer"
-  resource_group_name       = azurerm_resource_group.innov-hub-rg.name
+  resource_group_name       = azurerm_resource_group.nonprod-hub-rg.name
   virtual_network_name      = azurerm_virtual_network.hub-vnet.name
   remote_virtual_network_id = azurerm_virtual_network.track-vnet.id
   allow_virtual_network_access = true
