@@ -3,11 +3,11 @@ locals {
 }
 
 resource "azurerm_virtual_network" "hub-vnet" {
-        name = "${var.hub_vnet_name}"
-        location = "${var.location}"
-        resource_group_name = azurerm_resource_group.hub-rg.name
-        address_space = ["10.180.0.0/16"]
-        tags = {environment="hub"}
+    name = "${var.hub_vnet_name}"
+    location = "${var.location}"
+    resource_group_name = azurerm_resource_group.hub-rg.name
+    address_space = ["10.180.0.0/16"]
+    tags = {EnvironmentType="HUB"}
 	depends_on = ["azurerm_resource_group.hub-rg"]
 }
 resource "azurerm_subnet" "hub-gateway-subnet" {
@@ -35,12 +35,15 @@ resource "azurerm_subnet" "hub-firewall" {
   resource_group_name = azurerm_resource_group.hub-rg.name
   virtual_network_name	= azurerm_virtual_network.hub-vnet.name
   address_prefix = "10.180.1.0/24"
+  tags = {EnvironmentType="HUB"}
 }
 resource "azurerm_public_ip" "firewallip" {
   name = "firewallip"
   location = "${var.location}"
   resource_group_name = azurerm_resource_group.hub-rg.name
   sku = "Standard"
+      tags = {EnvironmentType="HUB"}
+
 }
 resource "azurerm_firewall" "firewall" {
   name = "firewallhub001"
@@ -51,6 +54,8 @@ resource "azurerm_firewall" "firewall" {
 	subnet_id = "${azurerm_subnet.hub-firewall.id}"
 	public_ip_address_id = "${azurerm_public_ip.firewallip.id}"
   }
+      tags = {EnvironmentType="HUB"}
+
 }
 
 resource "azurerm_network_interface" "hub-nic" {
@@ -65,9 +70,8 @@ resource "azurerm_network_interface" "hub-nic" {
     private_ip_address_allocation = "Dynamic"
   }
 
-  tags = {
-    environment = "hub"
-  }
+      tags = {EnvironmentType="HUB"}
+
 }
 
 resource "azurerm_virtual_machine" "hub-vm" {
@@ -101,8 +105,28 @@ resource "azurerm_virtual_machine" "hub-vm" {
     disable_password_authentication = false
   }
 
-  tags={
-    environment = "hub"
-  }
+    tags = {EnvironmentType="HUB"}
 }
 
+resource "azurerm_data_factory" "hub-adf" {
+  name                = "hub-adf"
+  location            = "${azurerm_resource_group.hub-rg.location}"
+  resource_group_name = "${azurerm_resource_group.hub-rg.name}"
+  tags = {EnvironmentType="HUB"}
+}
+
+
+resource "azurerm_data_lake_store" "hub-adls" {
+  name                = "hub-adls"
+  resource_group_name = "${azurerm_resource_group.hub-rg.name}"
+  location            = "${azurerm_resource_group.hub-rg.location}"
+  tags = {EnvironmentType="HUB"}
+}
+
+resource "azurerm_data_lake_store_firewall_rule" "hub-adls-firewall-rules" {
+  name                = "hub-adls-firewall-rules"
+  account_name        = "${azurerm_data_lake_store.hub-adls.name}"
+  resource_group_name = "${azurerm_resource_group.hub-rg.name}"
+  start_ip_address    = "${var.adls_firewall_start_ip}"
+  end_ip_address      = "${var.adls_firewall_end_ip}"
+}

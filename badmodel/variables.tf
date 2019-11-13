@@ -7,7 +7,6 @@ variable "tenant_id" {
   description = "Id of the tenant id"
   default = "31d4d1dc-cce4-44eb-9b04-f716a5be2630"
 }
-
 variable "client_id" {
   description = "Id of the client id"
   default = "09d839fc-29b5-4087-ad58-b0e991bf7113"
@@ -16,6 +15,10 @@ variable "client_id" {
 variable "client_secret" {
   description = "Id of the client"
   default = ""
+}
+variable "environment" {
+	description = "Default environment value"
+	default = "Innovation"
 }
 
 variable "hub_vnet_name" {
@@ -74,57 +77,6 @@ variable "subnet_names" {
   default     = ["subnet1", "subnet2", "subnet3"]
 }
 
-variable "nsg_ids" {
-  description = "A map of subnet name to Network Security Group IDs"
-  type        = "map"
-
-  default = {
-    subnet1 = "nsgid1"
-    subnet3 = "nsgid3"
-  }
-}
-
-variable "tags" {
-  description = "The tags to associate with your network and subnets."
-  type        = "map"
-
-  default = {
-    tag1 = ""
-    tag2 = ""
-  }
-}
-
-variable "hubtags" {
-  description = "Tags for hub resource group"
-  default = {
-	Environment-Type = "Non-Production"
-	Project = "Hub"
-  }
-}
-
-variable "datahubinnovtags" {
-  description = "Tags for Innovation data hub resource group"
-  default = {
-        Environment-Type = "Innovation"
-        Project = "DataHUB"
-  }
-}
-
-variable "spoketrackinnovtags" {
-  description = "Tags for Innovation track resource group"
-  default = {
-        Environment-Type = "Innovation"
-        Project = "Track"
-  }
-}
-
-variable "spokesignalinnovtags" {
-  description = "Tags for Innovation signalling resource group"
-  default = {
-        Environment-Type = "Innovation"
-        Project = "Signal"
-  }
-}
 variable "username" {
 	description = "Default user name to vm"
         default = "ubuntu"
@@ -139,3 +91,22 @@ variable "vmsize" {
 	default = "Standard_DS1_v2"
 }
 
+variable "adls_firewall_start_ip"{
+	description = "ADLS firewall rule start IP"
+	default = "0.0.0.0"
+}
+
+variable "adls_firewall_end_ip" {
+	description = "ADLS firewall rule end IP"
+	default = "0.0.0.0"
+}
+
+variable "sqlusername" {
+	description = "SQL user name to login to environment specific SQL server"
+	default = "user1"
+}
+
+variable "sqlpassword" {
+	description = "SQL server default password"
+	default = "password"
+}

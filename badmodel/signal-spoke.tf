@@ -1,60 +1,60 @@
-resource "azurerm_virtual_network" "track-vnet" {
-  name                = "${var.track_spoke_vnet_name}"
+resource "azurerm_virtual_network" "signal-vnet" {
+  name                = "${var.signal_spoke_vnet_name}"
   location            = azurerm_resource_group.innovation-rg.location
   resource_group_name = azurerm_resource_group.innovation-rg.name
-  address_space       = ["10.182.0.0/16"]
+  address_space       = ["10.183.0.0/16"]
 
   tags = {
 	EnvironmentType = "${var.environment}"
-	Project = "Track"
+	Project = "Signal"
   }
   depends_on = ["azurerm_resource_group.innovation-rg"]
 }
-resource "azurerm_subnet" "track-mgmt" {
+resource "azurerm_subnet" "signal-mgmt" {
   name                 = "mgmt"
   resource_group_name  = azurerm_resource_group.innovation-rg.name
-  virtual_network_name = azurerm_virtual_network.track-vnet.name
-  address_prefix       = "10.182.0.64/27"
+  virtual_network_name = azurerm_virtual_network.signal-vnet.name
+  address_prefix       = "10.183.0.64/27"
   tags = {
 	EnvironmentType = "${var.environment}"
-	Project = "Track"
+	Project = "Signal"
   }
 }
 
-resource "azurerm_virtual_network_peering" "track-hub-peer" {
-  name                      = "track-hub-peer"
+resource "azurerm_virtual_network_peering" "signal-hub-peer" {
+  name                      = "signal-hub-peer"
   resource_group_name       = azurerm_resource_group.innovation-rg.name
-  virtual_network_name      = azurerm_virtual_network.track-vnet.name
+  virtual_network_name      = azurerm_virtual_network.signal-vnet.name
   remote_virtual_network_id = azurerm_virtual_network.hub-vnet.id
 
   allow_virtual_network_access = true
   allow_forwarded_traffic = true
   allow_gateway_transit   = false
   use_remote_gateways     = false
-  depends_on = ["azurerm_virtual_network.track-vnet", "azurerm_virtual_network.hub-vnet" ]
+  depends_on = ["azurerm_virtual_network.signal-vnet", "azurerm_virtual_network.hub-vnet" ]
 }
-resource "azurerm_network_interface" "track-nic" {
-  name                 = "${local.prefix-track}-nic"
+resource "azurerm_network_interface" "signal-nic" {
+  name                 = "${local.prefix-signal}-nic"
   location             = azurerm_resource_group.innovation-rg.location
   resource_group_name  = azurerm_resource_group.innovation-rg.name
   enable_ip_forwarding = true
 
   ip_configuration {
-    name                          = "track-nic-ip"
-    subnet_id                     = azurerm_subnet.track-mgmt.id
+    name                          = "signal-nic-ip"
+    subnet_id                     = azurerm_subnet.signal-mgmt.id
     private_ip_address_allocation = "Dynamic"
   }
   tags = {
 	EnvironmentType = "${var.environment}"
-	Project = "Track"
+	Project = "Signal"
   }
 }
 
-resource "azurerm_virtual_machine" "track-vm" {
-  name                  = "track-vm"
+resource "azurerm_virtual_machine" "signal-vm" {
+  name                  = "signal-vm"
   location              = azurerm_resource_group.innovation-rg.location
   resource_group_name   = azurerm_resource_group.innovation-rg.name
-  network_interface_ids = [azurerm_network_interface.track-nic.id]
+  network_interface_ids = [azurerm_network_interface.signal-nic.id]
   vm_size               = var.vmsize
 
   storage_image_reference {
@@ -72,7 +72,7 @@ resource "azurerm_virtual_machine" "track-vm" {
   }
 
   os_profile {
-    computer_name  = "track-vm"
+    computer_name  = "signal-vm"
     admin_username = var.username
     admin_password = var.password
   }
@@ -83,18 +83,18 @@ resource "azurerm_virtual_machine" "track-vm" {
 
   tags = {
 	EnvironmentType = "${var.environment}"
-	Project = "Track"
+	Project = "Signal"
   }
 }
 
-resource "azurerm_virtual_network_peering" "hub-track-peer" {
-  name                      = "hub-track-peer"
+resource "azurerm_virtual_network_peering" "hub-signal-peer" {
+  name                      = "hub-signal-peer"
   resource_group_name       = azurerm_resource_group.hub-rg.name
   virtual_network_name      = azurerm_virtual_network.hub-vnet.name
-  remote_virtual_network_id = azurerm_virtual_network.track-vnet.id
+  remote_virtual_network_id = azurerm_virtual_network.signal-vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic   = true
   allow_gateway_transit     = false
   use_remote_gateways       = false
-  depends_on = ["azurerm_virtual_network.track-vnet", "azurerm_virtual_network.hub-vnet"]
+  depends_on = ["azurerm_virtual_network.signal-vnet", "azurerm_virtual_network.hub-vnet"]
 }
