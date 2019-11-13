@@ -15,10 +15,6 @@ resource "azurerm_subnet" "signal-mgmt" {
   resource_group_name  = azurerm_resource_group.innovation-rg.name
   virtual_network_name = azurerm_virtual_network.signal-vnet.name
   address_prefix       = "10.183.0.64/27"
-  tags = {
-	EnvironmentType = "${var.environment}"
-	Project = "Signal"
-  }
 }
 
 resource "azurerm_virtual_network_peering" "signal-hub-peer" {
