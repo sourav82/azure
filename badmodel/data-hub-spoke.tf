@@ -15,10 +15,6 @@ resource "azurerm_subnet" "data-hub-mgmt" {
   resource_group_name  = azurerm_resource_group.innovation-rg.name
   virtual_network_name = azurerm_virtual_network.data-hub-vnet.name
   address_prefix       = "10.181.0.64/27"
-  tags = {
-	EnvironmentType = "${var.environment}"
-	Project = "DataHub"
-  }
 }
 
 resource "azurerm_sql_server" "sqlserver" {
@@ -142,7 +138,7 @@ resource "azurerm_virtual_machine" "data-hub-vm" {
 
 resource "azurerm_virtual_network_peering" "hub-data-hub-peer" {
   name                      = "hub-data-hub-peer"
-  resource_group_name       = azurerm_resource_group.hub-rg.name
+  resource_group_name       = azurerm_resource_group.nonprod-hub-rg.name
   virtual_network_name      = azurerm_virtual_network.hub-vnet.name
   remote_virtual_network_id = azurerm_virtual_network.data-hub-vnet.id
   allow_virtual_network_access = true

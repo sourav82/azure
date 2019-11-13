@@ -111,8 +111,8 @@ resource "azurerm_data_factory" "hub-adf" {
 }
 
 
-resource "azurerm_data_lake_store" "hub-adls" {
-  name                = "hub-adls"
+resource "azurerm_data_lake_store" "hubadls" {
+  name                = "hubadls"
   resource_group_name = "${azurerm_resource_group.nonprod-hub-rg.name}"
   location            = "${azurerm_resource_group.nonprod-hub-rg.location}"
   tags = {EnvironmentType="HUB"}

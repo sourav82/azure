@@ -30,7 +30,7 @@ resource "azurerm_virtual_network_peering" "signal-hub-peer" {
   depends_on = ["azurerm_virtual_network.signal-vnet", "azurerm_virtual_network.hub-vnet" ]
 }
 resource "azurerm_network_interface" "signal-nic" {
-  name                 = "${local.prefix-signal}-nic"
+  name                 = "signal-innov-nic"
   location             = azurerm_resource_group.innovation-rg.location
   resource_group_name  = azurerm_resource_group.innovation-rg.name
   enable_ip_forwarding = true
@@ -85,7 +85,7 @@ resource "azurerm_virtual_machine" "signal-vm" {
 
 resource "azurerm_virtual_network_peering" "hub-signal-peer" {
   name                      = "hub-signal-peer"
-  resource_group_name       = azurerm_resource_group.hub-rg.name
+  resource_group_name       = azurerm_resource_group.nonprod-hub-rg.name
   virtual_network_name      = azurerm_virtual_network.hub-vnet.name
   remote_virtual_network_id = azurerm_virtual_network.signal-vnet.id
   allow_virtual_network_access = true
