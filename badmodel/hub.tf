@@ -120,7 +120,7 @@ resource "azurerm_data_lake_store" "hubadls" {
 
 resource "azurerm_data_lake_store_firewall_rule" "hub-adls-firewall-rules" {
   name                = "hub-adls-firewall-rules"
-  account_name        = "${azurerm_data_lake_store.hub-adls.name}"
+  account_name        = "${azurerm_data_lake_store.hubadls.name}"
   resource_group_name = "${azurerm_resource_group.nonprod-hub-rg.name}"
   start_ip_address    = "${var.adls_firewall_start_ip}"
   end_ip_address      = "${var.adls_firewall_end_ip}"

@@ -15,10 +15,6 @@ resource "azurerm_subnet" "track-mgmt" {
   resource_group_name  = azurerm_resource_group.innovation-rg.name
   virtual_network_name = azurerm_virtual_network.track-vnet.name
   address_prefix       = "10.182.0.64/27"
-  tags = {
-	EnvironmentType = "${var.environment}"
-	Project = "Track"
-  }
 }
 
 resource "azurerm_virtual_network_peering" "track-hub-peer" {
@@ -89,7 +85,7 @@ resource "azurerm_virtual_machine" "track-vm" {
 
 resource "azurerm_virtual_network_peering" "hub-track-peer" {
   name                      = "hub-track-peer"
-  resource_group_name       = azurerm_resource_group.hub-rg.name
+  resource_group_name       = azurerm_resource_group.innov-hub-rg.name
   virtual_network_name      = azurerm_virtual_network.hub-vnet.name
   remote_virtual_network_id = azurerm_virtual_network.track-vnet.id
   allow_virtual_network_access = true
