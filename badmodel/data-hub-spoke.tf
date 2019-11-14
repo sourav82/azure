@@ -114,7 +114,7 @@ resource "azurerm_virtual_machine" "data-hub-vm" {
   }
 
   storage_os_disk {
-    name              = "myosdisk1"
+    name              = "datahubdisk001"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
