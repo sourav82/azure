@@ -108,5 +108,5 @@ variable "sqlusername" {
 
 variable "sqlpassword" {
 	description = "SQL server default password"
-	default = "password"
+	default = "Passw0rd12345678!#"
 }
