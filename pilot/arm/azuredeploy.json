@@ -123,6 +123,11 @@
             }
         }
     },
+    "outputs": {
+      "app_service_evironment_id": {
+         "type": "string",
+         "value": "[resourceId('Microsoft.Web/hostingEnvironments', parameters('ilbase_name'))]"
+    },
     "resources": [
       {
         "apiVersion": "2015-08-01",
