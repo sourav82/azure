@@ -14,7 +14,12 @@ resource "azurerm_subnet" "vm-subnet"{
   virtual_network_name = azurerm_virtual_network.track-vnet.name
   address_prefix = "10.181.1.0/24"
 }
-
+resource "azurerm_subnet" "ase-sub"{
+  name = "ase-sub"
+  resource_group_name = azurerm_resource_group.spoke-rg.name
+  virtual_network_name = azurerm_virtual_network.track-vnet.name
+  address_prefix = "10.181.2.0/24"
+}
 resource "azurerm_network_interface" "tack-vm-nic" {
   name                = var.track_vm_nic_name
   location            = azurerm_resource_group.spoke-rg.location
@@ -77,7 +82,7 @@ resource "azurerm_sql_server" "sqliidemo" {
   resource_group_name          = azurerm_resource_group.spoke-rg.name
   location                     = azurerm_resource_group.spoke-rg.location
   version                      = "12.0"
-  administrator_login          = "admin"
+  administrator_login          = "windows"
   administrator_login_password = "IIProgramme123"
 
   tags = {
