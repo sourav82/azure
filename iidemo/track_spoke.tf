@@ -1,3 +1,13 @@
+resource "azurerm_virtual_network" data-vnet{
+  name = var.data_vnet_name
+  location = azurerm_resource_group.spoke-rg.location
+  resource_group_name = azurerm_resource_group.spoke-rg.name
+  address_space = var.data_vnet_address_space
+  tags = {
+        Environment-Type = "Demo",
+        Project = "Track"
+  }
+}
 resource "azurerm_sql_server" "sqliidemo" {
   name                         = "sqliidemo001"
   resource_group_name          = azurerm_resource_group.spoke-rg.name
