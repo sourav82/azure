@@ -26,3 +26,7 @@ variable "data_vnet_address_space" {
   description = "Address space for vnet"
   default = ["10.190.0.0/16"]
 }
+variable "password" {
+  description = "Password of sql server"
+  default = "test"
+}
